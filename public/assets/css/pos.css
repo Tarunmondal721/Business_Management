@@ -1,0 +1,26 @@
+.restrick{
+    color: red;
+    font-weight: bold;
+}
+
+.form-control:focus {
+    box-shadow: none !important;
+}
+.form-select:focus {
+    box-shadow: none !important;
+}
+.form-check-input:focus {
+    box-shadow: none !important;
+}
+
+.page-link:focus {
+    box-shadow: none !important;
+}
+
+.btn-close:focus {
+    box-shadow: none !important;
+}
+
+.text-secondary {
+    color: rgb(0, 193, 248) !important;
+}
