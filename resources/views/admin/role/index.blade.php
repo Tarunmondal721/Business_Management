@@ -93,16 +93,16 @@
                                                         @endif
                                                     </td>
                                                     <td>
-                                                        <button class="btn btn-info btn-sm viewRoleBtn"
-                                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}">
-                                                            <i class="bi bi-eye"></i> View
+                                                        <button class="btn btn-outline-info btn-sm viewRoleBtn"
+                                                            data-id="{{ $role->id }}" data-name="{{ $role->name }}" title="View Permissions">
+                                                            <i class="fa-solid fa-eye" ></i>
                                                         </button>
                                                         <a href="{{ route('admin.role.edit', $role->id) }}"
-                                                            class="btn btn-warning btn-sm">
-                                                            <i class="bi bi-pencil-square"></i> Edit
+                                                            class="btn btn-outline-warning btn-sm" title="Edit Role">
+                                                          <i class="fa-solid fa-pencil"></i>
                                                         </a>
                                                         <button data-id="{{ $role->id }}"
-                                                            class="btn btn-sm btn-outline-danger deleteBtn">
+                                                            class="btn btn-sm btn-outline-danger deleteBtn" title="Delete Role">
                                                             <i class="lni lni-trash-can"></i>
                                                         </button>
                                                     </td>

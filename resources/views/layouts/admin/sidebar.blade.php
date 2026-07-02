@@ -92,6 +92,79 @@
 
             {{-- End Role & Permission --}}
 
+            {{-- User Management --}}
+
+            @canany(['user.view','user.create','user.edit','user.delete'])
+                <span class="divider">
+                    <hr />
+                    <b>User Management</b>
+                    <hr />
+
+                </span>
+
+                <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.buyer-user.*')  ? 'active' : '' }}">
+                       <a href="#"
+                        class="{{ request()->routeIs('admin.buyer-user.*')  ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
+                        aria-expanded="{{ request()->routeIs('admin.buyer-user.*')  ? 'true' : 'false' }}">
+
+                        <span class="icon">
+                          <i class="fa-solid fa-users"></i>
+                            </span>
+                            <span class="text">Buyer Users</span>
+                    </a>
+
+                     <ul id="ddmenu_3" class="collapse dropdown-nav {{ request()->routeIs('admin.buyer-user.*') ? 'show' : '' }}">
+
+
+
+                        @can('buyer.view')
+                            <li>
+                                <a href="{{ route('admin.buyer-user.index') }}"
+                                    class="{{ request()->routeIs('admin.buyer-user.index') ? 'active' : '' }}">
+                                    Buyer Users List
+                                </a>
+                            </li>
+                        @endcan
+
+
+
+                    </ul>
+                </li>
+
+                   <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.seller-user.*')  ? 'active' : '' }}">
+                       <a href="#"
+                        class="{{ request()->routeIs('admin.seller-user.*')  ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" data-bs-target="#ddmenu_4"
+                        aria-expanded="{{ request()->routeIs('admin.seller-user.*')  ? 'true' : 'false' }}">
+
+                        <span class="icon">
+                          <i class="fa-solid fa-users"></i>
+                            </span>
+                            <span class="text">Seller Users</span>
+                    </a>
+
+                     <ul id="ddmenu_4" class="collapse dropdown-nav {{ request()->routeIs('admin.seller-user.*') ? 'show' : '' }}">
+
+
+
+                        @can('seller.view')
+                            <li>
+                                <a href="{{ route('admin.seller-user.index') }}"
+                                    class="{{ request()->routeIs('admin.seller-user.index') ? 'active' : '' }}">
+                                    Seller Users List
+                                </a>
+                            </li>
+                        @endcan
+
+
+
+                    </ul>
+                </li>
+            @endcanany
+
+            {{-- End User Management --}}
+
         </ul>
     </nav>
 
