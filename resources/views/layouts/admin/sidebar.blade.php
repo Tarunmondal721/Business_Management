@@ -48,8 +48,8 @@
 
                         <span class="icon">
                             <i class="lni lni-control-panel"></i>
-                            </span>
-                            <span class="text">Role Management</span>
+                        </span>
+                        <span class="text">Role Management</span>
                     </a>
 
                     <ul id="ddmenu_2" class="collapse dropdown-nav {{ request()->routeIs('admin.role.*') ? 'show' : '' }}">
@@ -76,15 +76,7 @@
                             </li>
                         @endcan
 
-                        {{-- PERMISSION --}}
-                        {{-- @can('permission.view')
-                                <li>
-                                    <a href="{{ route('admin.permission.index') }}"
-                                        class="{{ request()->routeIs('admin.permission.*') ? 'active' : '' }}">
-                                        {{trans('messages.permissions')}}
-                                    </a>
-                                </li>
-                            @endcan --}}
+
 
                     </ul>
                 </li>
@@ -94,7 +86,7 @@
 
             {{-- User Management --}}
 
-            @canany(['user.view','user.create','user.edit','user.delete'])
+            @canany(['user.view', 'user.create', 'user.edit', 'user.delete'])
                 <span class="divider">
                     <hr />
                     <b>User Management</b>
@@ -102,19 +94,19 @@
 
                 </span>
 
-                <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.buyer-user.*')  ? 'active' : '' }}">
-                       <a href="#"
-                        class="{{ request()->routeIs('admin.buyer-user.*')  ? '' : 'collapsed' }}"
+                <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.buyer-user.*') ? 'active' : '' }}">
+                    <a href="#" class="{{ request()->routeIs('admin.buyer-user.*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" data-bs-target="#ddmenu_3"
-                        aria-expanded="{{ request()->routeIs('admin.buyer-user.*')  ? 'true' : 'false' }}">
+                        aria-expanded="{{ request()->routeIs('admin.buyer-user.*') ? 'true' : 'false' }}">
 
                         <span class="icon">
-                          <i class="fa-solid fa-users"></i>
-                            </span>
-                            <span class="text">Buyer Users</span>
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                        <span class="text">Buyer Users</span>
                     </a>
 
-                     <ul id="ddmenu_3" class="collapse dropdown-nav {{ request()->routeIs('admin.buyer-user.*') ? 'show' : '' }}">
+                    <ul id="ddmenu_3"
+                        class="collapse dropdown-nav {{ request()->routeIs('admin.buyer-user.*') ? 'show' : '' }}">
 
 
 
@@ -132,19 +124,19 @@
                     </ul>
                 </li>
 
-                   <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.seller-user.*')  ? 'active' : '' }}">
-                       <a href="#"
-                        class="{{ request()->routeIs('admin.seller-user.*')  ? '' : 'collapsed' }}"
+                <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.seller-user.*') ? 'active' : '' }}">
+                    <a href="#" class="{{ request()->routeIs('admin.seller-user.*') ? '' : 'collapsed' }}"
                         data-bs-toggle="collapse" data-bs-target="#ddmenu_4"
-                        aria-expanded="{{ request()->routeIs('admin.seller-user.*')  ? 'true' : 'false' }}">
+                        aria-expanded="{{ request()->routeIs('admin.seller-user.*') ? 'true' : 'false' }}">
 
                         <span class="icon">
-                          <i class="fa-solid fa-users"></i>
-                            </span>
-                            <span class="text">Seller Users</span>
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                        <span class="text">Seller Users</span>
                     </a>
 
-                     <ul id="ddmenu_4" class="collapse dropdown-nav {{ request()->routeIs('admin.seller-user.*') ? 'show' : '' }}">
+                    <ul id="ddmenu_4"
+                        class="collapse dropdown-nav {{ request()->routeIs('admin.seller-user.*') ? 'show' : '' }}">
 
 
 
@@ -161,9 +153,66 @@
 
                     </ul>
                 </li>
+
+                <li class="nav-item nav-item-has-children {{ request()->routeIs('admin.user.*') ? 'active' : '' }}">
+                    <a href="#" class="{{ request()->routeIs('admin.user.*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" data-bs-target="#ddmenu_5"
+                        aria-expanded="{{ request()->routeIs('admin.user.*') ? 'true' : 'false' }}">
+
+                        <span class="icon">
+                            <i class="fa-solid fa-users"></i>
+                        </span>
+                        <span class="text">Permission Users</span>
+                    </a>
+
+                    <ul id="ddmenu_5"
+                        class="collapse dropdown-nav {{ request()->routeIs('admin.user.*') ? 'show' : '' }}">
+
+
+
+                        @can('user.view')
+                            <li>
+                                <a href="{{ route('admin.user.index') }}"
+                                    class="{{ request()->routeIs('admin.user.index') ? 'active' : '' }}">
+                                    Permission Users List
+                                </a>
+                            </li>
+                        @endcan
+
+
+
+                    </ul>
+                </li>
             @endcanany
 
             {{-- End User Management --}}
+
+            {{-- Fish Management --}}
+
+            @canany(['fish.view', 'fish.create', 'fish.edit', 'fish.delete'])
+                <span class="divider">
+                    <hr />
+                    <b>Fish Management</b>
+                    <hr />
+                </span>
+
+                @canany(['fish.view', 'fish.create', 'fish.edit', 'fish.delete'])
+                    <li
+                        class="nav-item
+                         {{ request()->routeIs('admin.fish.*') ? 'active' : '' }}">
+
+                        <a href="{{ route('admin.fish.index') }}"
+                            aria-expanded="{{ request()->routeIs('admin.fish.*') ? 'true' : 'false' }}">
+
+                            <span class="icon">
+                               <i class="fa-solid fa-fish"></i> </span>
+                            <span class="text">Fish List</span>
+                        </a>
+
+
+                    </li>
+                @endcanany
+            @endcanany
 
         </ul>
     </nav>

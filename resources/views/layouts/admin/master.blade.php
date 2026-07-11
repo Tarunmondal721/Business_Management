@@ -27,7 +27,8 @@
 
     {{-- <link rel="stylesheet" href="{{ asset('assets/css/pos.css') }}"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.bootstrap5.css">
+    {{-- <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.bootstrap5.css"> --}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.8/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -127,8 +128,10 @@
     <script src="{{ asset('assets/js/multilang-form.js') }}"></script>
 
     {{-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> --}}
-    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script>
+    {{-- <script src="https://cdn.datatables.net/2.3.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.js"></script> --}}
+    <script src="https://cdn.datatables.net/2.3.8/js/dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/2.3.8/js/dataTables.bootstrap5.min.js"></script>
     {{-- PayPal SDK --}}
     {{-- @php
             $paypalConfig = \App\Models\BusinessSetting::where('type', 'paypal')->first();

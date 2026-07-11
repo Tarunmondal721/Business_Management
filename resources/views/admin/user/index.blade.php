@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')
-    Seller User
+    Permission User
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="title">
-                            <h2>Seller User Management</h2>
+                            <h2>Permission User Management</h2>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -23,7 +23,7 @@
                                         <a href="{{ route('admin.dashboard') }}">Dashboard</a>
                                     </li>
                                     <li class="breadcrumb-item active" aria-current="page">
-                                        Seller User
+                                        Permission User
                                     </li>
                                 </ol>
                             </nav>
@@ -33,7 +33,7 @@
             </div>
             <!-- ========== title-wrapper end ========== -->
 
-            @include('admin.seller_user.table')
+            @include('admin.user.table')
         </div>
     </section>
 @endsection
@@ -44,7 +44,7 @@
             if (e.target.closest('.deleteBtn')) {
                 let id = e.target.closest('.deleteBtn').dataset.id;
                 Swal.fire({
-                    title: 'Are You Sure Want To Delete This Seller User?',
+                    title: 'Are You Sure Want To Delete This Permission User?',
                     text: 'This action cannot be undone.',
                     icon: 'warning',
                     showCancelButton: true,
@@ -53,7 +53,7 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        let url = "{{ route('admin.seller-user.destroy', ':id') }}";
+                        let url = "{{ route('admin.user.destroy', ':id') }}";
                         url = url.replace(':id', id);
                         let form = document.getElementById('deleteForm');
                         form.action = url;
@@ -64,7 +64,7 @@
         })
 
 
-        $('#sellerUserTable').DataTable({
+        $('#UserTable').DataTable({
             responsive: true,
             pageLength: 10,
             language: {
@@ -77,7 +77,7 @@
                 }
             },
             columnDefs: [{
-                targets: [3],
+                targets: [4],
                 orderable: false
             }]
         });

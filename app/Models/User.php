@@ -35,8 +35,8 @@ class User extends Authenticatable
 
      public function getProfileImageAttribute($value)
     {
-        if (!empty($value) && Storage::disk('public')->exists('admin/profile/' . $value)) {
-            return asset('storage/admin/profile/' . $value);
+        if (!empty($value) && Storage::disk('public')->exists('users/' . $value)) {
+            return asset('storage/users/' . $value);
         }
 
         return asset('assets/images/profile/profile-image.png');

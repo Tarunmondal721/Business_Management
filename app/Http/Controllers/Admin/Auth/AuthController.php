@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 class AuthController extends Controller
@@ -21,56 +22,106 @@ class AuthController extends Controller
         return view('admin.auth.login');
     }
 
+    // public function login(Request $request)
+    // {
+    //     /* ----------------------------
+    //  | Validate Input
+    //  -----------------------------*/
+    //     $request->validate([
+    //         'email'    => ['required', 'email'],
+    //         'password' => ['required', 'string', 'min:6'],
+    //     ]);
+
+    //     /* ----------------------------
+    //  | Rate Limiting
+    //  -----------------------------*/
+    //     $key = Str::lower($request->email) . '|' . $request->ip();
+
+    //     if (RateLimiter::tooManyAttempts($key, 5)) {
+    //         Toastr::error('Too many login attempts. Try again later.');
+    //         return back();
+    //     }
+
+    //     /* ----------------------------
+    //  | Remember Me Flag
+    //  -----------------------------*/
+    //     // $remember = $request->boolean('remember');
+
+    //     /* ----------------------------
+    //  | Attempt Login
+    //  -----------------------------*/
+
+
+    //     if (Auth::guard('web')->attempt(
+    //         [
+    //             'email'  => $request->email,
+    //             'password' => $request->password,
+    //             'status' => 1
+    //         ],
+    //         // $remember
+    //     )) {
+
+
+    //         RateLimiter::clear($key);
+    //         $request->session()->regenerate();
+
+    //         Toastr::success('Welcome back!');
+    //         return redirect()->route('admin.dashboard');
+    //     }
+
+    //     RateLimiter::hit($key, 60);
+
+    //     Toastr::error('Invalid email or password');
+    //     return back()->withInput($request->only('email'));
+    // }
+
+
     public function login(Request $request)
     {
-        /* ----------------------------
-     | Validate Input
-     -----------------------------*/
-        $request->validate([
-            'email'    => ['required', 'email'],
-            'password' => ['required', 'string', 'min:8'],
+        $validator = Validator::make($request->all(), [
+            'email'    => 'required|email',
+            'password' => 'required|min:8',
         ]);
 
-        /* ----------------------------
-     | Rate Limiting
-     -----------------------------*/
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors(),
+            ], 422);
+        }
+
         $key = Str::lower($request->email) . '|' . $request->ip();
 
         if (RateLimiter::tooManyAttempts($key, 5)) {
-            Toastr::error('Too many login attempts. Try again later.');
-            return back();
+            return response()->json([
+                'status' => false,
+                'message' => 'Too many login attempts. Try again later.',
+            ], 429);
         }
 
-        /* ----------------------------
-     | Remember Me Flag
-     -----------------------------*/
-        // $remember = $request->boolean('remember');
-
-        /* ----------------------------
-     | Attempt Login
-     -----------------------------*/
-        if (Auth::guard('web')->attempt(
-            [
-                'email'  => $request->email,
-                'password' => $request->password,
-                'status' => 1
-            ],
-            // $remember
-        )) {
+        if (Auth::guard('web')->attempt([
+            'email' => $request->email,
+            'password' => $request->password,
+            'status' => 1,
+        ])) {
 
             RateLimiter::clear($key);
             $request->session()->regenerate();
 
-            Toastr::success('Welcome back!');
-            return redirect()->route('admin.dashboard');
+            return response()->json([
+                'status' => true,
+                'message' => 'Login successful.',
+                'redirect' => route('admin.dashboard'),
+            ]);
         }
 
         RateLimiter::hit($key, 60);
 
-        Toastr::error('Invalid email or password');
-        return back()->withInput($request->only('email'));
+        return response()->json([
+            'status' => false,
+            'message' => 'Invalid email or password.',
+        ], 401);
     }
-
     public function logout()
     {
         Auth::guard('web')->logout();

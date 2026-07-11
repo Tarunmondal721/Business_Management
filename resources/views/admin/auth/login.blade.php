@@ -51,6 +51,8 @@
                                                 <input type="email" name="email"
                                                     class="form-control bg-outline-none form-control-lg" required
                                                     placeholder="Enter email" value="{{ old('email') }}">
+
+                                                <span class="text-danger email_error"></span>
                                             </div>
                                         </div>
 
@@ -68,6 +70,7 @@
                                                     onclick="togglePassword('password', 'toggleIcon')">
                                                     <i id="toggleIcon" class="fa fa-eye-slash"></i>
                                                 </span>
+                                                <span class="text-danger password_error"></span>
 
                                             </div>
                                         </div>
@@ -138,5 +141,51 @@
                 icon.classList.add('fa-eye-slash');
             }
         }
+
+
+
+        $('#loginForm').submit(function(e) {
+
+            e.preventDefault();
+
+            $('.text-danger').html('');
+
+            $.ajax({
+
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+
+                beforeSend: function() {
+                    $('button[type=submit]').prop('disabled', true);
+                },
+
+                success: function(response) {
+
+                    toastr.success(response.message);
+
+                    window.location.href = response.redirect;
+                },
+
+                error: function(xhr) {
+
+                    $('button[type=submit]').prop('disabled', false);
+
+                    if (xhr.status == 422) {
+
+                        $.each(xhr.responseJSON.errors, function(key, value) {
+                            $('.' + key + '_error').html(value[0]);
+                        });
+
+                    } else {
+
+                        toastr.error(xhr.responseJSON.message);
+                    }
+
+                }
+
+            });
+
+        });
     </script>
 @endsection

@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\Auth\AuthController;
 use App\Http\Controllers\Admin\BuyerUserController;
 use App\Http\Controllers\Admin\DashBoardController;
+use App\Http\Controllers\Admin\FishController;
 use App\Http\Controllers\Admin\RoleCrontroller;
 use App\Http\Controllers\Admin\SellerUserController;
+use App\Http\Controllers\Admin\UserControlle;
 use App\Models\BuyerUser;
 use Illuminate\Support\Facades\Route;
 
@@ -37,7 +39,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             Route::put('/buyer-user/{buyer_user}','update')->name('buyer-user.update');
             Route::delete('/buyer-user/{buyer_user}','destroy')->name('buyer-user.destroy');
             Route::post('/buyer-user/change-status','changeStatus')->name('buyer-user.change-status');
-            
+
         });
 
 
@@ -50,6 +52,25 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             Route::delete('/seller-user/{seller_user}','destroy')->name('seller-user.destroy');
             Route::post('/seller-user/change-status','changeStatus')->name('seller-user.change-status');
         });
+
+        Route::controller(UserControlle::class)->group(function(){
+            Route::get('/user','index')->name('user.index');
+            Route::get('/user/create','create')->name('user.create');
+            Route::post('/user','store')->name('user.store');
+            Route::get('/user/{user}/edit','edit')->name('user.edit');
+            Route::put('/user/{user}','update')->name('user.update');
+            Route::delete('/user/{user}','destroy')->name('user.destroy');
+        });
+
+        Route::controller(FishController::class)->group(function(){
+            Route::get('/fish','index')->name('fish.index');
+            Route::get('/fish/create','create')->name('fish.create');
+            Route::post('/fish','store')->name('fish.store');
+            Route::get('/fish/{fish}/edit','edit')->name('fish.edit');
+            Route::put('/fish/{fish}','update')->name('fish.update');
+            Route::delete('/fish/{fish}','destroy')->name('fish.destroy');
+        });
+
 
     });
 });
