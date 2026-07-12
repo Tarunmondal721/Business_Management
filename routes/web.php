@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashBoardController;
 use App\Http\Controllers\Admin\FishController;
 use App\Http\Controllers\Admin\RoleCrontroller;
 use App\Http\Controllers\Admin\SellerUserController;
+use App\Http\Controllers\Admin\SellingController;
 use App\Http\Controllers\Admin\UserControlle;
 use App\Models\BuyerUser;
 use Illuminate\Support\Facades\Route;
@@ -69,6 +70,15 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             Route::get('/fish/{fish}/edit','edit')->name('fish.edit');
             Route::put('/fish/{fish}','update')->name('fish.update');
             Route::delete('/fish/{fish}','destroy')->name('fish.destroy');
+        });
+
+        Route::controller(SellingController::class)->group(function(){
+            Route::get('/selling','index')->name('selling.index');
+            Route::get('/selling/create','create')->name('selling.create');
+            Route::post('/selling','store')->name('selling.store');
+            Route::get('/selling/{selling}/edit','edit')->name('selling.edit');
+            Route::put('/selling/{selling}','update')->name('selling.update');
+            Route::delete('/selling/{selling}','destroy')->name('selling.destroy');
         });
 
 

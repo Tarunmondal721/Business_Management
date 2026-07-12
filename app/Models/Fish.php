@@ -10,4 +10,9 @@ class Fish extends Model
     protected $table = 'fishs';
 
 
+    public function ScopeGetBystatus($query)
+    {
+        return $query->where('status', 1);
+    }
+
 }

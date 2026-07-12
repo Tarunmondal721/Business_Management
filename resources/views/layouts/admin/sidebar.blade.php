@@ -197,21 +197,68 @@
                 </span>
 
                 @canany(['fish.view', 'fish.create', 'fish.edit', 'fish.delete'])
-                    <li
-                        class="nav-item
+                    <li class="nav-item
                          {{ request()->routeIs('admin.fish.*') ? 'active' : '' }}">
 
                         <a href="{{ route('admin.fish.index') }}"
                             aria-expanded="{{ request()->routeIs('admin.fish.*') ? 'true' : 'false' }}">
 
                             <span class="icon">
-                               <i class="fa-solid fa-fish"></i> </span>
+                                <i class="fa-solid fa-fish"></i> </span>
                             <span class="text">Fish List</span>
                         </a>
 
 
                     </li>
                 @endcanany
+            @endcanany
+
+            {{-- End Fish Management --}}
+
+
+            {{-- Product Management --}}
+
+            @canany(['selling.view', 'selling.create', 'selling.edit', 'selling.delete'])
+                <span class="divider">
+                    <hr />
+                    <b>Product Management</b>
+                    <hr />
+                </span>
+
+                <li
+                    class="nav-item nav-item-has-children
+                         {{ request()->routeIs('admin.selling.*') ? 'active' : '' }}">
+
+                    <a href="#" class="{{ request()->routeIs('admin.selling.*') ? '' : 'collapsed' }}"
+                        data-bs-toggle="collapse" data-bs-target="#ddmenu_6"
+                        aria-expanded="{{ request()->routeIs('admin.selling.*') ? 'true' : 'false' }}">
+
+                        <span class="icon">
+                            <i class="fa fa-solid fa-cart-shopping"></i>
+                        </span>
+                        <span class="text">Selling Management</span>
+                    </a>
+
+                    <ul id="ddmenu_6"
+                        class="collapse dropdown-nav {{ request()->routeIs('admin.selling.*') ? 'show' : '' }}">
+
+                        {{-- selling --}}
+
+
+
+                        @can('selling.view')
+                            <li>
+                                <a href="{{ route('admin.selling.index') }}"
+                                    class="{{ request()->routeIs('admin.selling.*') ? 'active' : '' }}">
+                                    Selling List
+                                </a>
+                            </li>
+                        @endcan
+
+
+
+                    </ul>
+                </li>
             @endcanany
 
         </ul>
