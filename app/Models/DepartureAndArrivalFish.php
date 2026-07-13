@@ -7,4 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class DepartureAndArrivalFish extends Model
 {
     protected $table = 'departure_arrival_fishs';
+   protected $guarded = [];
+
 }

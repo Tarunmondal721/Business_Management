@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SellingRequest;
 use App\Models\ArrivalProduct;
 use App\Models\DepartureAndArrivalFish;
 use App\Models\Departureproduct;
@@ -31,30 +32,12 @@ class SellingController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(SellingRequest $request)
     {
         abort_unless(auth()->guard('web')->user()->can('selling.create'), 404);
+        // dd($request->all());
 
-        $validator = Validator::make($request->all(), [
-            'seller_id'      => 'required|exists:seller_users,id',
-            'departure_date' => 'required',
-            'arrival_date'   => 'nullable',
-            'bag_name'       => 'required',
-            'fish_id'        => 'required|array',
-            'fish_id.*'      => 'required',
-            'quantity'       => 'required|array',
-            'weight'         => 'required|array',
-            'unit'           => 'required|array',
-            'price'          => 'required|array',
-            'attachment'     => 'nullable|mimes:jpg,jpeg,png,pdf,doc,docx',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'success' => 0,
-                'errors' => $validator->errors(),
-            ], 422);
-        }
+        
 
         DB::beginTransaction();
 
@@ -72,10 +55,10 @@ class SellingController extends Controller
 
                 $file = $request->file('attachment');
                 $attachment = time() . '.' . $file->getClientOriginalExtension();
-                Storage::disk('public')->putFileAs('bill/attachment', $file, $attachment);
+                Storage::disk('public')->putFileAs('bill/attachment/', $file, $attachment);
             }
 
-            /*
+        /*
         |--------------------------------------------------------------------------
         | Departure Product
         |--------------------------------------------------------------------------
@@ -87,14 +70,15 @@ class SellingController extends Controller
                 'bag_name'        => $request->bag_name,
                 'total_quantity'  => $request->total_quantity,
                 'weight_per_bag'  => $request->weight_per_bag,
-                'unit'            => $request->unit[0] ?? $request->unit,
+                'unit'            =>  $request->unit,
                 'total_weight'    => $request->total_weight,
                 'departure_date'  => $request->departure_date,
-                'arrival_date'    => $request->arrival_date,
-
+                'expected_arrival_date'    => $request->arrival_date,
+                'booking_cost_per_bag' => $request->booking_cost_per_bag,
+                'total_booking_cost' => $request->total_booking_cost,
             ]);
 
-            /*
+        /*
         |--------------------------------------------------------------------------
         | Arrival Product
         |--------------------------------------------------------------------------
@@ -105,42 +89,74 @@ class SellingController extends Controller
                 'departure_id' => $departure->id,
                 'arrival_date' => $request->arrival_date,
                 'attachment'   => $attachment,
+                'billing_date' => $request->billing_date,
 
             ]);
 
-            /*
+        /*
         |--------------------------------------------------------------------------
         | Fish Details
         |--------------------------------------------------------------------------
         */
 
-            foreach ($request->fish_id as $key => $fish) {
+            foreach ($request->departure_fish_id as $key => $fish) {
 
-                $quantity = $request->quantity[$key] ?? 0;
-                $weight   = $request->weight[$key] ?? 0;
-                $unit     = $request->unit[$key] ?? '';
-                $price    = $request->price[$key] ?? 0;
+                $quantity = $request->departure_quantity[$key] ?? 0;
+                $weight   = $request->departure_weight[$key] ?? 0;
+                $unit     = $request->departure_unit[$key] ?? '';
+                $total_weight = $request->departure_total_weight[$key] ?? 0;
+                // $price    = $request->price[$key] ?? 0;
 
                 DepartureAndArrivalFish::create([
 
                     'departure_id'  => $departure->id,
-                    'arrival_id'    => $arrival->id,
-                    'fish_id'       => $fish,
+                    // 'arrival_id'    => $arrival->id,
+                    'departure_fish_id'       => $fish,
 
-                    'quantity'      => $quantity,
-                    'weight'        => $weight,
-                    'unit'          => $unit,
+                    'departure_quantity'      => $quantity,
+                    'departure_weight'        => $weight,
+                    'departure_unit'          => $unit,
+                    'departure_total_weight'  => $total_weight,
 
-                    'total_weight'  => $weight,
-
-                    'total_quantity' => $quantity,
-
-                    'price'         => $price,
-
-                    'total_price'   => $quantity * $price,
+                    'departure_total_fish'     => $request->departure_total_fish ?? 0,
+                    'departure_total_quantity' => $request->departure_total_quantity ?? 0,
+                    'departure_grand_total_weight' => $request->departure_grand_total_weight ?? 0,
 
                 ]);
             }
+
+            if($request->hasfile('attachment') && count($request->bill_fish_id) > 0){
+
+                foreach ($request->bill_fish_id as $key => $fish) {
+
+                  $quantity = $request->bill_quantity[$key] ?? 0;
+                  $weight   = $request->bill_weight[$key] ?? 0;
+                  $unit     = $request->bill_unit[$key] ?? '';
+                  $price    = $request->bill_price[$key] ?? 0;
+                  $total_weight = $request->bill_total_weight[$key] ?? 0;
+                  $total_price = $request->bill_total_price[$key] ?? 0;
+
+
+                  DepartureAndArrivalFish::create([
+
+                      'arrival_id'    => $arrival->id,
+                      'arrival_fish_id'       => $fish,
+                      'bill_quantity'      => $quantity,
+                      'bill_weight'        => $weight,
+                      'bill_unit'          => $unit,
+                      'bill_price'         => $price,
+                      'bill_total_weight'  => $total_weight,
+                      'bill_total_price'   => $total_price,
+
+                      'grand_total'         => $request->grand_total ?? 0,
+                      'bill_grand_total_weight' => $request->bill_grand_total_weight ?? 0,
+                      'bill_total_fish'     => $request->bill_total_fish ?? 0,
+                      'bill_total_quantity' => $request->bill_total_quantity ?? 0,
+
+                  ]);
+                }
+            }
+
 
             DB::commit();
 

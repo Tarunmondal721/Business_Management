@@ -84,9 +84,46 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     function showValidationErrors(errors, form) {
+
+        // Clear old errors
+        form.find('.text-danger').html('');
+
         $.each(errors, function (key, value) {
-            form.find('.' + key + '_error').html(value[0]);
+
+            if (key.indexOf('.') !== -1) {
+
+                let parts = key.split('.');
+
+                let field = parts[0];
+                let index = parts[1];
+
+                // Departure Table
+                if (field.startsWith('departure_')) {
+
+                    $('#departureFishTable tbody tr')
+                        .eq(index)
+                        .find('.' + field + '_error')
+                        .html(value[0]);
+
+                }
+                // Bill Table
+                else if (field.startsWith('bill_')) {
+
+                    $('#billFishTable tbody tr')
+                        .eq(index)
+                        .find('.' + field + '_error')
+                        .html(value[0]);
+
+                }
+
+            } else {
+
+                form.find('.' + key + '_error').html(value[0]);
+
+            }
+
         });
+
     }
 
     $(document).on('click', '#resetForm', function () {
