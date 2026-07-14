@@ -76,6 +76,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             Route::get('/selling','index')->name('selling.index');
             Route::get('/selling/create','create')->name('selling.create');
             Route::post('/selling','store')->name('selling.store');
+            Route::get('/selling/{selling}/show','show')->name('selling.show');
             Route::get('/selling/{selling}/edit','edit')->name('selling.edit');
             Route::put('/selling/{selling}','update')->name('selling.update');
             Route::delete('/selling/{selling}','destroy')->name('selling.destroy');

@@ -45,7 +45,9 @@ class SellingRequest extends FormRequest
             'departure_unit.*'       => 'required',
 
             // Bill
-            'attachment'             => 'nullable|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'attachment' => 'nullable|array',
+
+            'attachment.*' => 'mimes:jpg,jpeg,png,pdf|max:2048',
 
             'bill_fish_id'           => 'required_with:attachment|array',
             'bill_fish_id.*'         => 'required_with:attachment|exists:fishs,id',

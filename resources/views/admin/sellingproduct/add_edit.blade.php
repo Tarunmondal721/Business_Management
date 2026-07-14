@@ -519,8 +519,10 @@
                                             Attachment Bill
                                         </label>
 
-                                        <input type="file" name="attachment" class="form-control"
-                                            accept=".jpg,.jpeg,.png,.pdf">
+                                        <input type="file" name="attachment[]" class="form-control" id="attachment"
+                                            accept=".jpg,.jpeg,.png,.pdf" multiple>
+
+                                        <small class="text-danger attachment_error"></small>
 
 
                                         <small class="text-danger attachment_error"></small>
@@ -539,23 +541,11 @@
 
                                     <div class="mt-3" id="billPreview" style="display:none;">
 
-                                        <img id="billPreviewImage" class="img-thumbnail"
-                                            style="max-height:250px;display:none;">
+                                        <div class="row" id="previewContainer"></div>
 
-                                        <div id="pdfPreview" class="alert alert-info mt-2" style="display:none;">
-
-                                            <i class="fa fa-file-pdf text-danger"></i>
-
-                                            <span id="pdfFileName"></span>
-
-                                        </div>
-
-                                        <button type="button" class="btn btn-danger btn-sm mt-2" id="removeBillFile"
+                                        <button type="button" class="btn btn-danger btn-sm mt-3" id="removeBillFile"
                                             style="display:none;">
-
-                                            <i class="fa fa-trash"></i>
-                                            Remove File
-
+                                            <i class="fa fa-trash"></i> Remove All
                                         </button>
 
                                     </div>
@@ -1179,72 +1169,83 @@
 
         // });
 
-        $(document).ready(function() {
+        $(function () {
 
-            $('input[name="attachment"]').on('change', function() {
+    $('#attachment').on('change', function () {
 
-                let file = this.files[0];
+        let files = this.files;
 
-                if (!file) {
-                    return;
-                }
+        if (!files.length) return;
 
-                $('#billSection').removeClass('d-none');
+        $('#billSection').removeClass('d-none');
+        $('#billPreview').show();
+        $('#removeBillFile').show();
 
-                $('#billPreview').show();
+        $('#previewContainer').html('');
 
-                $('#removeBillFile').show();
+        $.each(files, function (index, file) {
 
-                let extension = file.name.split('.').pop().toLowerCase();
+            let extension = file.name.split('.').pop().toLowerCase();
 
-                if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(extension)) {
+            if (['jpg','jpeg','png','gif','webp'].includes(extension)) {
 
-                    let reader = new FileReader();
+                let reader = new FileReader();
 
-                    reader.onload = function(e) {
+                reader.onload = function (e) {
 
-                        $('#billPreviewImage')
-                            .attr('src', e.target.result)
-                            .show();
+                    $('#previewContainer').append(`
+                        <div class="col-md-3 mb-3 text-center">
 
-                        $('#pdfPreview').hide();
+                            <img src="${e.target.result}"
+                                 class="img-thumbnail"
+                                 style="height:180px;width:100%;object-fit:cover;">
 
-                    };
+                            <small class="d-block mt-2">${file.name}</small>
 
-                    reader.readAsDataURL(file);
+                        </div>
+                    `);
 
-                } else if (extension === 'pdf') {
+                };
 
-                    $('#billPreviewImage').hide();
+                reader.readAsDataURL(file);
 
-                    $('#pdfPreview').show();
+            } else if (extension === 'pdf') {
 
-                    $('#pdfFileName').text(file.name);
+                $('#previewContainer').append(`
+                    <div class="col-md-3 mb-3">
 
-                }
+                        <div class="border rounded p-4 text-center">
 
-            });
+                            <i class="fa fa-file-pdf fa-3x text-danger"></i>
 
+                            <p class="small mt-2 mb-0">${file.name}</p>
 
-            // Remove Selected File
-            $('#removeBillFile').click(function() {
+                        </div>
 
-                $('input[name="attachment"]').val('');
+                    </div>
+                `);
 
-                $('#billPreviewImage').attr('src', '').hide();
-
-                $('#pdfPreview').hide();
-
-                $('#pdfFileName').text('');
-
-                $('#billPreview').hide();
-
-                $('#removeBillFile').hide();
-
-                $('#billSection').addClass('d-none');
-
-            });
+            }
 
         });
+
+    });
+
+    // Remove All
+    $('#removeBillFile').click(function () {
+
+        $('#attachment').val('');
+
+        $('#previewContainer').html('');
+
+        $('#billPreview').hide();
+
+        $('#removeBillFile').hide();
+
+        $('#billSection').addClass('d-none');
+
+    });
+
+});
     </script>
 @endpush
